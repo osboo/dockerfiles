@@ -1,5 +1,5 @@
 # Mojibake
-FROM 
+FROM ardinor/centos-python3.4.2
 MAINTAINER Jordan M <jordan@defestri.org>
 
 # Need UTF-8 support, doesn't get set automatically
@@ -21,21 +21,22 @@ source env/bin/activate
 
 # Install requirements
 # Remove oursql from requirments.txt, install will fail and prevent others downloading
-# jinja2-highlight is missing as well
-# setproctitle missing too
-# tornado was missing too
 cd /opt/mojibake/apps/current
 pip install -r requirements.txt
 # Oursql install will fail, Python3 version isn't on PyPy yet
 yum install -y mariadb-devel wget
-pip install cython 
+pip install cython
 cd /tmp
 # Curl won't get it, need to use wget
 wget https://launchpad.net/oursql/py3k/py3k-0.9.4/+download/oursql-0.9.4.tar.gz
 tar xf oursql-0.9.4.tar.gz
 cd oursql-0.9.4
-python setup.py build_ext
-python setup.py install
+python3.4 setup.py build_ext
+python3.4 setup.py install
+
+# Set up the DB here
+cd /opt/mojibake/current
+python3.4 setup.py $ADMIN_USERNAME $ADMIN_PASSWORD
 
 # Finally compile translations
 pybabel compile -d mojibake/translations
