@@ -7,6 +7,8 @@ ENV LANGUAGE en_AU.UTF-8
 ENV LANG en_AU.UTF-8
 ENV LC_ALL en_AU.UTF-8
 
+RUN yum install -y git
+
 # Make directories
 # Move logs into a data container app
 RUN mkdir -p /opt/mojibake/logs && mkdir -p /opt/mojibake/apps
