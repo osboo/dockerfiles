@@ -12,6 +12,7 @@ echo $ADMIN_USER
 echo $ADMIN_PASS
 
 python3.4 /opt/mojibake/apps/mojibake/setup.py "$ADMIN_USER" "$ADMIN_PASS"
+chown -R mojibake:mojibake /opt/mojibake
 
 start_mojibake_as_user()
 {

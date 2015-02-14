@@ -26,14 +26,17 @@ RUN cd /tmp \
     && tar xf oursql-0.9.4.tar.gz \
     && cd oursql-0.9.4 \
     && python3.4 setup.py build_ext \
-    && python3.4 setup.py install
+    && python3.4 setup.py install \
+    && yum remove -y wget
 
 # Add the user the mojibake will be running under here
-RUN useradd -r mojibake && chown -R mojibake:mojibake /opt/mojibake
+RUN groupadd -r mojibake && useradd -r -g mojibake mojibake && chown -R mojibake:mojibake /opt/mojibake
 
-COPY mojibake_entrypoint.sh /opt/
-RUN chmod +x /opt/mojibake_entrypoint.sh && chown mojibake:mojibake /opt/mojibake_entrypoint.sh
+COPY mojibake-entrypoint.sh /opt/
+RUN chmod +x /opt/mojibake-entrypoint.sh && chown mojibake:mojibake /opt/mojibake-entrypoint.sh
 # Can't run it yet, getting permission denied error on the entry point...
 
+#WORKDIR /opt
 EXPOSE 8000
-ENTRYPOINT ["/opt/mojibake_entrypoint.sh"]
+ENTRYPOINT ["/opt/mojibake-entrypoint.sh"]
+#CMD ["/bin/bash", "/opt/mojibake-entrypoint.sh"]
