@@ -31,17 +31,9 @@ RUN cd /tmp \
 # Add the user the mojibake will be running under here
 RUN useradd -r mojibake && chown -R mojibake:mojibake /opt/mojibake
 
-# Set up the DB here
-COPY mojibake_setup.sh /
-RUN chmod +x /mojibake_setup.sh && ./mojibake_setup.sh
-#cd /opt/mojibake/apps/mojibake
-#python3.4 setup.py $ADMIN_USERNAME $ADMIN_PASSWORD
+COPY mojibake_entrypoint.sh /opt/
+RUN chmod +x /opt/mojibake_entrypoint.sh && chown mojibake:mojibake /opt/mojibake_entrypoint.sh
+# Can't run it yet, getting permission denied error on the entry point...
 
-# Finally compile translations
-#pybabel compile -d mojibake/translations
-
-COPY mojibake_entrypoint.sh /opt
-
-WORKDIR /opt
 EXPOSE 8000
-ENTRYPOINT mojibake_entrypoint.sh
+ENTRYPOINT ["/opt/mojibake_entrypoint.sh"]
