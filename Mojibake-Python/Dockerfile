@@ -32,11 +32,7 @@ RUN cd /tmp \
 # Add the user the mojibake will be running under here
 RUN groupadd -r mojibake && useradd -r -g mojibake mojibake && chown -R mojibake:mojibake /opt/mojibake
 
-COPY mojibake-entrypoint.sh /opt/
-RUN chmod +x /opt/mojibake-entrypoint.sh && chown mojibake:mojibake /opt/mojibake-entrypoint.sh
-# Can't run it yet, getting permission denied error on the entry point...
+ADD mojibake-entrypoint.sh /
 
-#WORKDIR /opt
 EXPOSE 8000
-ENTRYPOINT ["/opt/mojibake-entrypoint.sh"]
-#CMD ["/bin/bash", "/opt/mojibake-entrypoint.sh"]
+ENTRYPOINT ["/mojibake-entrypoint.sh"]
