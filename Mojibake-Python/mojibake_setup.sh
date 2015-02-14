@@ -7,6 +7,5 @@ if [ -z "$ADMIN_USER" -o -z "$ADMIN_PASS" ]; then
     exit 1
 fi
 
-source /opt/mojibake/apps/env/bin/activate
 echo "Running mojibake setup..."
-python3.4 /opt/mojibake/app/current/setup.py "$ADMIN_USER" "$ADMIN_PASS"
+python3.4 /opt/mojibake/apps/mojibake/setup.py "$ADMIN_USER" "$ADMIN_PASS"

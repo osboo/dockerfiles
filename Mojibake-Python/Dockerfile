@@ -13,17 +13,13 @@ RUN yum install -y git
 # Move logs into a data container app
 RUN mkdir -p /opt/mojibake/logs && mkdir -p /opt/mojibake/apps
 RUN cd /opt/mojibake/apps/ && git clone https://github.com/ardinor/mojibake.git
-#RUN ln -s /opt/mojibake/apps/mojibake /opt/mojibake/apps/current
-# Really no need to use virtualenv on docker?
-#pyvenv-3.4 env
-#source env/bin/activate
 
 # Install requirements
 # Remove oursql from requirments.txt, install will fail and prevent others downloading
-RUN cd /opt/mojibake/apps/mojibake && pip install -r requirements.txt
+RUN cd /opt/mojibake/apps/mojibake && pip3.4 install -r requirements.txt
 # Oursql install will fail, Python3 version isn't on PyPy yet
 RUN yum install -y mariadb-devel wget
-RUN pip install cython
+RUN pip3.4 install cython
 # Curl won't get it, need to use wget
 RUN cd /tmp \
     && wget https://launchpad.net/oursql/py3k/py3k-0.9.4/+download/oursql-0.9.4.tar.gz \
@@ -33,12 +29,12 @@ RUN cd /tmp \
     && python3.4 setup.py install
 
 # Set up the DB here
-cd /opt/mojibake/current
+cd /opt/mojibake/apps/mojibake
 python3.4 setup.py $ADMIN_USERNAME $ADMIN_PASSWORD
 
 # Finally compile translations
 pybabel compile -d mojibake/translations
 
-WORKDIR /opt/mojibake/apps/current
+WORKDIR /opt/mojibake/apps/mojibake
 EXPOSE 8000
 ENTRYPOINT python3.4 tornado_srv.py
