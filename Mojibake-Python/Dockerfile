@@ -28,13 +28,20 @@ RUN cd /tmp \
     && python3.4 setup.py build_ext \
     && python3.4 setup.py install
 
+# Add the user the mojibake will be running under here
+RUN useradd -r mojibake && chown -R mojibake:mojibake /opt/mojibake
+
 # Set up the DB here
-cd /opt/mojibake/apps/mojibake
-python3.4 setup.py $ADMIN_USERNAME $ADMIN_PASSWORD
+COPY mojibake_setup.sh /
+RUN chmod +x /mojibake_setup.sh && ./mojibake_setup.sh
+#cd /opt/mojibake/apps/mojibake
+#python3.4 setup.py $ADMIN_USERNAME $ADMIN_PASSWORD
 
 # Finally compile translations
-pybabel compile -d mojibake/translations
+#pybabel compile -d mojibake/translations
 
-WORKDIR /opt/mojibake/apps/mojibake
+COPY mojibake_entrypoint.sh /opt
+
+WORKDIR /opt
 EXPOSE 8000
-ENTRYPOINT python3.4 tornado_srv.py
+ENTRYPOINT mojibake_entrypoint.sh
