@@ -7,10 +7,10 @@ if [ -z "$ADMIN_USER" -o -z "$ADMIN_PASS" ]; then
     exit 1
 fi
 
-echo "Running mojibake setup..."
-echo $ADMIN_USER
-echo $ADMIN_PASS
+echo "Running tests..."
+python3.4 /opt/mojibake/apps/mojibake/tests.py
 
+echo "Running mojibake setup..."
 python3.4 /opt/mojibake/apps/mojibake/setup.py "$ADMIN_USER" "$ADMIN_PASS"
 chown -R mojibake:mojibake /opt/mojibake
 
