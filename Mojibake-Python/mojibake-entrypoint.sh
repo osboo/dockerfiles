@@ -7,6 +7,23 @@ if [ -z "$ADMIN_USER" -o -z "$ADMIN_PASS" ]; then
     exit 1
 fi
 
+if [ -z "$DB_USER" -o -z "$DB_PASS" ]; then
+    echo >&2 'error: DB_USER and/or DB_PASS is not set'
+    echo >&2 '  Did you forget to add -e DB_USER=<name> DB_PASS=<pass>'
+    exit 1
+fi
+
+# Generate a secret key
+KEY=$(python3.4 -c "import base64,uuid;print(base64.b64encode(uuid.uuid4().bytes+uuid.uuid4().bytes));")
+
+# Put the secret key we generated in config.py, use @ as a delimited since
+# the above can generate a key with a slash in it
+sed -i "s@SECRET_KEY = '.*'@SECRET_KEY = \'$KEY\'@" /opt/mojibake/apps/mojibake/mojibake/settings.py
+
+# Add in the DB credentials to config.py
+sed -i "s/USERNAME = '.*'/USERNAME = \'$DB_USER\'/" /opt/mojibake/apps/mojibake/mojibake/settings.py
+sed -i "s/PASSWORD = '.*'/PASSWORD = \'$DB_PASS\'/" /opt/mojibake/apps/mojibake/mojibake/settings.py
+
 echo "Running tests..."
 python3.4 /opt/mojibake/apps/mojibake/tests.py
 
