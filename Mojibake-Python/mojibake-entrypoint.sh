@@ -14,7 +14,7 @@ if [ -z "$DB_USER" -o -z "$DB_PASS" ]; then
 fi
 
 # Generate a secret key
-KEY=$(python3.4 -c "import base64,uuid;print(base64.b64encode(uuid.uuid4().bytes+uuid.uuid4().bytes));")
+KEY=$(python3.4 -c "import base64,uuid;print(base64.b64encode(uuid.uuid4().bytes+uuid.uuid4().bytes).decode('utf-8'));")
 
 # Put the secret key we generated in config.py, use @ as a delimited since
 # the above can generate a key with a slash in it
@@ -24,9 +24,11 @@ sed -i "s@SECRET_KEY = '.*'@SECRET_KEY = \'$KEY\'@" /opt/mojibake/apps/mojibake/
 sed -i "s/USERNAME = '.*'/USERNAME = \'$DB_USER\'/" /opt/mojibake/apps/mojibake/mojibake/settings.py
 sed -i "s/PASSWORD = '.*'/PASSWORD = \'$DB_PASS\'/" /opt/mojibake/apps/mojibake/mojibake/settings.py
 
+# Run the automated tests to ensure we don't have a dud build
 echo "Running tests..."
 python3.4 /opt/mojibake/apps/mojibake/tests.py
 
+# Run the setup, create the DBs and add the admin user
 echo "Running mojibake setup..."
 python3.4 /opt/mojibake/apps/mojibake/setup.py "$ADMIN_USER" "$ADMIN_PASS"
 chown -R mojibake:mojibake /opt/mojibake
