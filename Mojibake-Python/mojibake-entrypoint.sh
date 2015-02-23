@@ -13,6 +13,10 @@ if [ -z "$DB_USER" -o -z "$DB_PASS" ]; then
     exit 1
 fi
 
+# Ensure we're up to date
+echo "Pulling down latest version..."
+cd /opt/mojibake/apps/mojibake && git init && git pull
+
 # Generate a secret key
 KEY=$(python3.4 -c "import base64,uuid;print(base64.b64encode(uuid.uuid4().bytes+uuid.uuid4().bytes).decode('utf-8'));")
 
@@ -24,19 +28,21 @@ sed -i "s@SECRET_KEY = '.*'@SECRET_KEY = \'$KEY\'@" /opt/mojibake/apps/mojibake/
 sed -i "s/USERNAME = '.*'/USERNAME = \'$DB_USER\'/" /opt/mojibake/apps/mojibake/mojibake/settings.py
 sed -i "s/PASSWORD = '.*'/PASSWORD = \'$DB_PASS\'/" /opt/mojibake/apps/mojibake/mojibake/settings.py
 
-# Run the automated tests to ensure we don't have a dud build
-echo "Running tests..."
-python3.4 /opt/mojibake/apps/mojibake/tests.py
-
 # Run the setup, create the DBs and add the admin user
 echo "Running mojibake setup..."
 python3.4 /opt/mojibake/apps/mojibake/setup.py "$ADMIN_USER" "$ADMIN_PASS"
 chown -R mojibake:mojibake /opt/mojibake
 
+# Run the unit tests to ensure we don't have a dud build
+echo "Running tests..."
+python3.4 /opt/mojibake/apps/mojibake/tests.py
+
 start_mojibake_as_user()
 {
-    pybabel compile -d /opt/mojibake/apps/mojibake/translations
-    python3.4 /opt/mojibake/apps/mojibake/tornado_srv.py *> /opt/mojibake/logs/mojibake.log &
+    echo "Compiling translations..."
+    pybabel compile -d /opt/mojibake/apps/mojibake/mojibake/translations
+    echo "Starting mojibake..."
+    python3.4 /opt/mojibake/apps/mojibake/tornado_srv.py
 }
 
 export -f start_mojibake_as_user
