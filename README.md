@@ -10,4 +10,12 @@ Dockerfiles I've made, work in progress at the moment
 
   * Dockerfile based off [ardinor/centos-python3.4.2](https://registry.hub.docker.com/u/ardinor/centos-python3.4.2/) that makes creates a container for the blogging engine [MØjibДĸe](https://github.com/ardinor/mojibake). This is a Python 3 application.
 
+* ### Mojibake-MariaDB ###
+
+ * Docker file to iniate the mojibake database with existing SQl data dump
+
 Docker repository is located [here](https://hub.docker.com/u/ardinor/).
+
+TO DO
+-------------------------
+- Look at [Fig](http://www.fig.sh/)
