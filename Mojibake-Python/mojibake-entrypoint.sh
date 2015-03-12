@@ -1,6 +1,17 @@
 #!/bin/bash
 set -e
 
+# function does_db_exist {
+#     local result=$(mysql -u ${DB_USER} --password=${DB_PASS} -s -N -e "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'mojibake'" information_schema)
+#     if [ -z "${result}"]; then
+#         # DB does not exist
+#         return 1
+#     else
+#         # DB exists
+#         return 2
+#     fi
+# }
+
 if [ -z "$ADMIN_USER" -o -z "$ADMIN_PASS" ]; then
     echo >&2 'error: ADMIN_USER and/or ADMIN_PASS is not set'
     echo >&2 '  Did you forget to add -e ADMIN_USER=<name> ADMIN_PASS=<pass>'
@@ -28,10 +39,13 @@ sed -i "s@SECRET_KEY = '.*'@SECRET_KEY = \'$KEY\'@" /opt/mojibake/apps/mojibake/
 sed -i "s/USERNAME = '.*'/USERNAME = \'$DB_USER\'/" /opt/mojibake/apps/mojibake/mojibake/settings.py
 sed -i "s/PASSWORD = '.*'/PASSWORD = \'$DB_PASS\'/" /opt/mojibake/apps/mojibake/mojibake/settings.py
 
-# Run the setup, create the DBs and add the admin user
-echo "Running mojibake setup..."
-python3.4 /opt/mojibake/apps/mojibake/setup.py "$ADMIN_USER" "$ADMIN_PASS"
-chown -R mojibake:mojibake /opt/mojibake
+# does_db_exist
+# if [ $? == 1 ]; then
+#     # Run the setup, create the DBs and add the admin user
+#     echo "Running mojibake setup..."
+#     python3.4 /opt/mojibake/apps/mojibake/setup.py "$ADMIN_USER" "$ADMIN_PASS"
+#     chown -R mojibake:mojibake /opt/mojibake
+# fi
 
 # Run the unit tests to ensure we don't have a dud build
 echo "Running tests..."
