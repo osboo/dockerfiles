@@ -32,6 +32,10 @@ RUN cd /tmp \
 # Add the user the mojibake will be running under here
 RUN groupadd -r mojibake && useradd -r -g mojibake mojibake && chown -R mojibake:mojibake /opt/mojibake
 
+RUN mkdir -p /mojibake && chown -R mojibake:mojibake /mojibake
+
+VOLUME /mojibake
+
 ADD mojibake-entrypoint.sh /
 
 EXPOSE 8000

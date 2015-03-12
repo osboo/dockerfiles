@@ -18,4 +18,4 @@ Docker repository is located [here](https://hub.docker.com/u/ardinor/).
 
 TO DO
 -------------------------
-- Look at [Fig](http://www.fig.sh/)
+- Look at Docker Compose
