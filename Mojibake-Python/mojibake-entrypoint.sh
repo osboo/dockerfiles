@@ -17,12 +17,12 @@ fi
 echo "Pulling down latest version..."
 cd /opt/mojibake/apps/mojibake && git init && git pull
 
-if [ ! -f /mojibake/.mojibake_settings ]; then
+if [ ! -f /var/lib/mojibake/.mojibake_settings ]; then
     echo "Settings file does not yet exist, creating settings file..."
 
-    cp /opt/mojibake/apps/mojibake/sample_credentials /mojibake/.mojibake_settings
-    chown mojibake:mojibake /mojibake/.mojibake_settings
-    chmod 600 /mojibake/.mojibake_settings
+    cp /opt/mojibake/apps/mojibake/sample_credentials /var/lib/mojibake/.mojibake_settings
+    chown mojibake:mojibake /var/lib/mojibake/.mojibake_settings
+    chmod 600 /var/lib/mojibake/.mojibake_settings
 
     echo "Set secret key and user details..."
 
@@ -32,13 +32,13 @@ if [ ! -f /mojibake/.mojibake_settings ]; then
     # Put the secret key we generated in config.py, use @ as a delimited since
     # the above can generate a key with a slash in it
     #sed -i "s@SECRET_KEY = '.*'@SECRET_KEY = \'$KEY\'@" /opt/mojibake/apps/mojibake/mojibake/settings.py
-    sed -i "s@SECRET_KEY=.*@SECRET_KEY=$KEY@" /mojibake/.mojibake_settings
+    sed -i "s@SECRET_KEY=.*@SECRET_KEY=$KEY@" /var/lib/mojibake/.mojibake_settings
 
     # Add in the DB credentials to config.py
     #sed -i "s/USERNAME = '.*'/USERNAME = \'$DB_USER\'/" /opt/mojibake/apps/mojibake/mojibake/settings.py
     #sed -i "s/PASSWORD = '.*'/PASSWORD = \'$DB_PASS\'/" /opt/mojibake/apps/mojibake/mojibake/settings.py
-    sed -i "s/USERNAME=.*/USERNAME=$DB_USER/" /mojibake/.mojibake_settings
-    sed -i "s/PASSWORD=.*/PASSWORD=$DB_PASS/" /mojibake/.mojibake_settings
+    sed -i "s/USERNAME=.*/USERNAME=$DB_USER/" /var/lib/mojibake/.mojibake_settings
+    sed -i "s/PASSWORD=.*/PASSWORD=$DB_PASS/" /var/lib/mojibake/.mojibake_settings
 
     echo "Running mojibake setup..."
     python3.4 /opt/mojibake/apps/mojibake/setup.py "$ADMIN_USER" "$ADMIN_PASS"
