@@ -2,7 +2,7 @@
 FROM centos:latest
 MAINTAINER Jordan M <jordan@defestri.org>
 
-RUN yum update -y
+RUN yum update -y && yum clean all
 # Download required tools to compile
 # Produces the below error but still works...
 # There is no installed groups file.
