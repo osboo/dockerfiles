@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# Add the option to read settings from a file instead of passing them all as parameters
-if [ "$READ_SETTINGS_FILE" ]; then
-    source /settings.sh
-fi
-
 # gets the first character of the arguments, and if it's '-'
 if [ "${1:0:1}" = '-' ]; then
     # set -- clears existing arguments then sets the command to
@@ -57,13 +52,7 @@ GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION ;
 DROP DATABASE IF EXISTS test ;
 EOSQL
 
-        if [ "$MYSQL_DATABASES" ]; then
-            for DATABASE in $MYSQL_DATABASES
-            do
-                echo "Creating database $DATABASE..."
-                echo "CREATE DATABASE IF NOT EXISTS \`$DATABASE\` ;" >> "$tempSqlFile"
-            done
-        else
+        if [ "$DATABASE_LIST" ]; then
             for DATABASE in "${DATABASE_LIST[@]}"
             do
                 echo "Creating database $DATABASE..."
@@ -74,12 +63,7 @@ EOSQL
         if [ "$MYSQL_USER" -a "$MYSQL_PASSWORD" ]; then
             echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' ;" >> "$tempSqlFile"
 
-            if [ "$MYSQL_DATABASES" ]; then
-                for DATABASE in $MYSQL_DATABASES
-                do
-                    echo "GRANT ALL ON \`$DATABASE\`.* TO '$MYSQL_USER'@'%' ;" >> "$tempSqlFile"
-                done
-            else
+            if [ "$DATABASE_LIST" ]; then
                 for DATABASE in "${DATABASE_LIST[@]}"
                 do
                     echo "GRANT ALL ON \`$DATABASE\`.* TO '$MYSQL_USER'@'%' ;" >> "$tempSqlFile"
