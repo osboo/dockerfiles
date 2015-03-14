@@ -34,30 +34,39 @@ if [ "$1" = 'mysqld' ]; then
         echo 'Finished mysql_install_db'
 
         # Or we can send a comma delimited list as the environment variable
-        # MYSQL_DATABASE, the below then splits the string on , turning
-        # it into an array
+        # MYSQL_DATABASE, the below then splits the string on ',' turning
+        # it into an array.
+        # NB - No spaces after the comma!
+        #echo "MYSQL_DATABASE - $MYSQL_DATABASE"
         IFS="," read -ra DATABASE_LIST <<< "$MYSQL_DATABASE"
+        #echo "DATABASE_LIST - {$DATABASE_LIST[@]}"
 
         # These statements _must_ be on individual lines, and _must_ end with
         # semicolons (no line breaks or comments are permitted).
         # TODO proper SQL escaping on ALL the things D:
 
         tempSqlFile='/tmp/mysql-first-time.sql'
+        # Putting - in front of the delimiter word automatically removes
+        # tabs allowing you to indent the conent of the here document,
+        # however my editor automatically converts tabs to spaces,
+        # great for Python programing, not so here...
         cat > "$tempSqlFile" <<-EOSQL
-            DELETE FROM mysql.user ;
-            CREATE USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
-            GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION ;
-            DROP DATABASE IF EXISTS test ;
-        EOSQL
+DELETE FROM mysql.user ;
+CREATE USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
+GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION ;
+DROP DATABASE IF EXISTS test ;
+EOSQL
 
         if [ "$MYSQL_DATABASES" ]; then
             for DATABASE in $MYSQL_DATABASES
             do
+                echo "Creating database $DATABASE..."
                 echo "CREATE DATABASE IF NOT EXISTS \`$DATABASE\` ;" >> "$tempSqlFile"
             done
         else
-            for DATABASE in $DATABASE_LIST
+            for DATABASE in "${DATABASE_LIST[@]}"
             do
+                echo "Creating database $DATABASE..."
                 echo "CREATE DATABASE IF NOT EXISTS \`$DATABASE\` ;" >> "$tempSqlFile"
             done
         fi
@@ -71,7 +80,7 @@ if [ "$1" = 'mysqld' ]; then
                     echo "GRANT ALL ON \`$DATABASE\`.* TO '$MYSQL_USER'@'%' ;" >> "$tempSqlFile"
                 done
             else
-                for DATABASE in $DATABASE_LIST
+                for DATABASE in "${DATABASE_LIST[@]}"
                 do
                     echo "GRANT ALL ON \`$DATABASE\`.* TO '$MYSQL_USER'@'%' ;" >> "$tempSqlFile"
                 done
