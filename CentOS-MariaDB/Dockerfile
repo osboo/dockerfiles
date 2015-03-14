@@ -6,10 +6,12 @@ RUN yum update -y
 
 ADD mariadb.repo /etc/yum.repos.d/mariadb.repo
 
-RUM yum clean all && yum install -y MariaDB-server MariaDB-client
+RUN rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB && yum clean all && yum install -y MariaDB-server
+
+RUN sed -ri 's/^(bind-address|skip-networking)/;\1/' /etc/mysql/my.cnf
 
 ADD settings.sh /
-ADD config_mariadb.sh /
+ADD entrypoint.sh /
 
 VOLUME ["/etc/mysql", "/var/lib/mysql"]
 
