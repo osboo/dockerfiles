@@ -16,9 +16,7 @@ if [ "$1" = 'mysqld' ]; then
     # the print $2 prints only the second part, the directory /var/lib/mysql
     DATADIR="$("$@" --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
 
-    # If the directory doesn't exist
     if [ ! -d "$DATADIR/mysql" ]; then
-        echo 'in third - doesnt work'
         if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" ]; then
             echo >&2 'error: database is uninitialized and MYSQL_ROOT_PASSWORD not set'
             echo >&2 '  Did you forget to add -e MYSQL_ROOT_PASSWORD=... ?'
@@ -33,9 +31,7 @@ if [ "$1" = 'mysqld' ]; then
         # MYSQL_DATABASE, the below then splits the string on ',' turning
         # it into an array.
         # NB - No spaces after the comma!
-        #echo "MYSQL_DATABASE - $MYSQL_DATABASE"
         IFS="," read -ra DATABASE_LIST <<< "$MYSQL_DATABASE"
-        #echo "DATABASE_LIST - {$DATABASE_LIST[@]}"
 
         # These statements _must_ be on individual lines, and _must_ end with
         # semicolons (no line breaks or comments are permitted).
