@@ -18,6 +18,7 @@ if [ "$1" = 'mysqld' ]; then
 
     # If the directory doesn't exist
     if [ ! -d "$DATADIR/mysql" ]; then
+        echo 'in third - doesnt work'
         if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" ]; then
             echo >&2 'error: database is uninitialized and MYSQL_ROOT_PASSWORD not set'
             echo >&2 '  Did you forget to add -e MYSQL_ROOT_PASSWORD=... ?'

@@ -10,8 +10,15 @@ ADD mariadb.repo /etc/yum.repos.d/mariadb.repo
 
 RUN rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB && yum clean all && yum install -y hostname MariaDB-server
 
+# Original Debian version had
+# sed -ri 's/^(bind-address|skip-networking)/;\1/' /etc/mysql/my.cnf
+# this just comments out (puts ; in front of) any entry for bind-address
+# or skip-networking in the config file
+
+RUN cp /usr/share/mysql/my-medium.cnf /etc/my.cnf.d/server.cnf
 RUN sed -i "/\[mysqld\]/a\\user=mysql" /etc/my.cnf.d/server.cnf
-RUN sed -i "/\[mysqld\]/a\\bind-address=127.0.0.1" /etc/my.cnf.d/server.cnf
+#RUN sed -i "/\[mysqld\]/a\\bind-address=127.0.0.1" /etc/my.cnf.d/server.cnf
+#RUN sed -i "/\[mysqld\]/a\\socket=/var/lib/mysql/mysql.sock" /etc/my.cnf.d/server.cnf
 
 ADD entrypoint.sh /
 
@@ -19,4 +26,5 @@ VOLUME ["/etc/my.cnf.d", "/var/lib/mysql"]
 
 ENTRYPOINT ["/entrypoint.sh"]
 
+EXPOSE 3306
 CMD ["mysqld"]
