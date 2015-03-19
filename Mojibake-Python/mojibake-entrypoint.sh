@@ -1,6 +1,30 @@
 #!/bin/bash
 set -e
 
+function wait_until_db_ready
+{
+    DB_URL="$MOJIBAKEDB_PORT_3306_TCP_ADDR/$MOJIBAKEDB_PORT_3306_TCP_PORT"
+    echo "Attempting connection to $DB_URL..."
+
+    # http://stackoverflow.com/a/9609247
+    # Use file descriptor 6 to check tcp connection
+    while ! exec 6<>/dev/tcp/$MOJIBAKEDB_PORT_3306_TCP_ADDR/$MOJIBAKEDB_PORT_3306_TCP_PORT; do
+        echo "$(date) - unable to connect to DB at $DB_URL address waiting..."
+        sleep 1
+    done
+
+    # close output connection
+    exec 6>&-
+    # close input connection
+    exec 6<&-
+
+    echo "Connected to DB succesfully, continuing..."
+
+    return 0
+}
+
+#export -f wait_until_db_ready
+
 # Ensure we're up to date
 echo "Pulling down latest version..."
 cd /opt/mojibake/apps/mojibake && git init && git pull
@@ -18,6 +42,14 @@ if [ ! -f /var/lib/mojibake/.mojibake_settings ]; then
         echo >&2 '  Did you forget to add -e DB_USER=<name> DB_PASS=<pass>'
         exit 1
     fi
+
+    if [ -z "$MOJIBAKEDB_PORT_3306_TCP" ]; then
+        echo >&2 'error: missing MOJIBAKEDB_PORT_3306_TCP environment variable'
+        echo >&2 ' Did you forget to start a DB container?'
+        exit 1
+    fi
+
+    wait_until_db_ready
 
     echo "Settings file does not yet exist, creating settings file..."
 

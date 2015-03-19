@@ -1,0 +1,41 @@
+dbdata:
+  image: centos
+  volumes:
+    - /var/lib/mysql
+  # Currently there's no way to make a data only container that does
+  # nothing, you need a command or an entrypoint
+  command: echo
+
+mojibakedb:
+  image: ardinor/centos-mariadb
+  volumes_from:
+    - dbdata
+  # Environment variables with only a key are resolved to their values
+  # on the machine Compose is running on, which can be helpful for
+  # secret or host-specific values.(from docs)
+  environment:
+    - MYSQL_ROOT_PASSWORD
+    - MYSQL_USER
+    - MYSQL_PASSWORD
+    - MYSQL_DATABASE=mojibake,mojibake_test
+
+mojibakedata:
+  image: centos
+  volumes:
+    - /var/lib/mojibake
+  command: echo
+
+mojibake:
+  image: ardinor/mojibake-python
+  volumes_from:
+    - mojibakedata
+  ports:
+    - "127.0.0.1:5000:8000"
+  environment:
+    - ADMIN_USER
+    - ADMIN_PASS
+    - DB_USER
+    - DB_PASS
+  links:
+    - mojibakedb
+

@@ -1,4 +1,4 @@
-## Mojibake-MariaDB ##
+## CentOS-MariaDB ##
 
 Docker file using the latest CentOS to install MariaDB from mariadb.org's yum repo. It follows much of the path as the official [MariaDB repo](https://registry.hub.docker.com/_/mariadb/) except it's on CentOS and it offers support for creating multiple databases on intial creation.
 

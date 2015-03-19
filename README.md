@@ -17,6 +17,9 @@ Dockerfiles I've made, work in progress at the moment
 
 Docker repository is located [here](https://hub.docker.com/u/ardinor/).
 
+[Docker Compose](http://docs.docker.com/compose/) files are located in the [Compose files](Compose%20files/
+) folder
+
 TO DO
 -------------------------
 - Look at Docker Compose
