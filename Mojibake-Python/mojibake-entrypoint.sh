@@ -23,8 +23,6 @@ function wait_until_db_ready
     return 0
 }
 
-#export -f wait_until_db_ready
-
 # Ensure we're up to date
 echo "Pulling down latest version..."
 cd /opt/mojibake/apps/mojibake && git init && git pull
@@ -90,6 +88,8 @@ start_mojibake_as_user()
     python3.4 /opt/mojibake/apps/mojibake/tornado_srv.py
 }
 
+# We need to use set it as an environment variable (export) in order
+# for it to run properly with su
 export -f start_mojibake_as_user
 
 su mojibake -c start_mojibake_as_user
