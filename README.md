@@ -24,3 +24,5 @@ TO DO
 -------------------------
 - Look at Docker Compose
 - Look at [logspout](https://github.com/gliderlabs/logspout) for logging.
+- Send the logs somewhere, maybe a logstash container and then ship them off?
+- Investigate [Consul](https://www.consul.io/intro/index.html)

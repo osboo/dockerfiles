@@ -1,3 +1,6 @@
+
+# Apparently logspout needs to either start first or all other
+# containers need to be restarted after it's up for it to get logs
 logs:
   image: gliderlabs/logspout:latest
   volume: /var/run/docker.sock:/tmp/docker.sock
