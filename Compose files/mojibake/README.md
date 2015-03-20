@@ -9,3 +9,7 @@ TO START:
 cd to the directory and start the containers
     cd mojibake/
     docker-compose up -d
+
+TO DO:
+-------------------------
+- Send the logs somewhere, maybe a logstash container and then ship them off?

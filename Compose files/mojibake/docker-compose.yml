@@ -1,3 +1,7 @@
+logs:
+  image: gliderlabs/logspout:latest
+  volume: /var/run/docker.sock:/tmp/docker.sock
+
 dbdata:
   image: centos
   volumes:

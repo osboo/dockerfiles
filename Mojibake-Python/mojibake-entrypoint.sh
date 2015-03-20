@@ -82,6 +82,8 @@ python3.4 /opt/mojibake/apps/mojibake/tests.py
 
 start_mojibake_as_user()
 {
+    # Compile the translations as the user so we have the right permissions
+    # and we don't have to chown/chmod it later
     echo "Compiling translations..."
     pybabel compile -d /opt/mojibake/apps/mojibake/mojibake/translations
     echo "Starting mojibake..."
