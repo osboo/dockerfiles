@@ -4,6 +4,7 @@
 logs:
   image: gliderlabs/logspout:latest
   volume: /var/run/docker.sock:/tmp/docker.sock
+  ports: "5687:8000"
 
 dbdata:
   image: centos
