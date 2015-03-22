@@ -7,9 +7,11 @@ Can't seem to use underscore in service names...
 TO START:
 
 cd to the directory and start the containers
+
     cd mojibake/
+
     docker-compose up -d
 
 TO DO:
 -------------------------
-- Send the logs somewhere, maybe a logstash container and then ship them off?
+- Send the logs somewhere, maybe a [logstash-forwarder](https://github.com/elastic/logstash-forwarder) container and then ship them off?
