@@ -5,6 +5,7 @@ logs:
   image: gliderlabs/logspout:latest
   volume: /var/run/docker.sock:/tmp/docker.sock
   ports: "5687:8000"
+  restart: always
 
 dbdata:
   image: centos
@@ -13,6 +14,7 @@ dbdata:
   # Currently there's no way to make a data only container that does
   # nothing, you need a command or an entrypoint
   command: echo
+  restart: always
 
 mojibakedb:
   image: ardinor/centos-mariadb
@@ -26,12 +28,14 @@ mojibakedb:
     - MYSQL_USER
     - MYSQL_PASSWORD
     - MYSQL_DATABASE=mojibake,mojibake_test
+  restart: always
 
 mojibakedata:
   image: centos
   volumes:
     - /var/lib/mojibake
   command: echo
+  restart: always
 
 mojibake:
   image: ardinor/mojibake-python
@@ -46,4 +50,7 @@ mojibake:
     - DB_PASS
   links:
     - mojibakedb
+  # Restart the mojibake container only 10 times
+  # Ensure this works for reboots as well
+  restart: on-failure:10
 
