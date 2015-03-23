@@ -4,4 +4,4 @@ Logstash container which catches the logs from Docker containers (using [logspou
 
 TO DO
 -------------------------
-- Add option to expose port so the server running this can forward its own logs to this container.
+- Add option to expose port so the server running this can forward its own logs to this container. Don't forget to forward TCP AND UDP when doing this (/udp to the -p option)
