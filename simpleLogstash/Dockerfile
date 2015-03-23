@@ -2,10 +2,12 @@ FROM java:7
 MAINTAINER Jordan M <jordan@defestri.org>
 
 RUN cd /tmp && \
-    curl -o https://download.elasticsearch.org/logstash/logstash/logstash-1.4.2.tar.gz \
+    curl -O https://download.elasticsearch.org/logstash/logstash/logstash-1.4.2.tar.gz \
     && tar -zxvf logstash-1.4.2.tar.gz \
     && mv logstash-1.4.2 /opt \
-    && rm logstash-1.4.2
+    && rm logstash-1.4.2.tar.gz
+
+RUN /opt/logstash-1.4.2/bin/plugin install contrib
 
 ADD entrypoint.sh /
 
