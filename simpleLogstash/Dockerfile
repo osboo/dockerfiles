@@ -8,6 +8,7 @@ RUN cd /tmp && \
     && rm logstash-1.4.2.tar.gz
 
 RUN /opt/logstash-1.4.2/bin/plugin install contrib
+RUN mkdir -p /etc/logstash/conf.d
 
 ADD entrypoint.sh /
 

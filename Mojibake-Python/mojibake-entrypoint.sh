@@ -30,13 +30,13 @@ cd /opt/mojibake/apps/mojibake && git init && git pull
 if [ ! -f /var/lib/mojibake/.mojibake_settings ]; then
 
     if [ -z "$ADMIN_USER" -o -z "$ADMIN_PASS" ]; then
-        echo >&2 'error: ADMIN_USER and/or ADMIN_PASS is not set'
+        echo >&2 'error: ADMIN_USER and/or ADMIN_PASS are not set'
         echo >&2 '  Did you forget to add -e ADMIN_USER=<name> ADMIN_PASS=<pass>'
         exit 1
     fi
 
     if [ -z "$DB_USER" -o -z "$DB_PASS" ]; then
-        echo >&2 'error: DB_USER and/or DB_PASS is not set'
+        echo >&2 'error: DB_USER and/or DB_PASS are not set'
         echo >&2 '  Did you forget to add -e DB_USER=<name> DB_PASS=<pass>'
         exit 1
     fi
