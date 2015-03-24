@@ -14,6 +14,7 @@ logstash:
 
 # Apparently logspout needs to either start first or all other
 # containers need to be restarted after it's up for it to get logs
+# since we don't actually want the logs of the logstash instance (or do we?)
 logger:
   image: gliderlabs/logspout:latest
   volumes: /var/run/docker.sock:/tmp/docker.sock
