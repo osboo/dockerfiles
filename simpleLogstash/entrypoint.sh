@@ -12,24 +12,20 @@ if [ ! -f /etc/logstash/conf.d/default.conf ]; then
     cat <<EOF >> /etc/logstash/conf.d/default.conf
 input {
     tcp {
-        port => 5544
-        type => docker
-        charset => UTF-8
+        port => "5544"
+        type => "docker"
     }
     udp {
-        port => 5544
-        type => docker
-        charset => UTF-8
+        port => "5544"
+        type => "docker"
     }
     tcp {
-        port => 5545
-        type => syslog
-        charset => UTF-8
+        port => "5545"
+        type => "syslog"
     }
     udp {
-        port => 5545
-        type => syslog
-        charset => UTF-8
+        port => "5545"
+        type => "syslog"
     }
 }
 
@@ -61,8 +57,10 @@ filter {
 output {
     stdout { codec => rubydebug }
     redis {
-        host: $REDIS_HOST
-        port: #REDIS_PORT
+        host => "$REDIS_HOST"
+        port => $REDIS_PORT
+        data_type => "list"
+        key => "logstash-%{type}"
     }
 }
 EOF

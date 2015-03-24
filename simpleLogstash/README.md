@@ -1,6 +1,6 @@
 ## simpleLogstash ##
 
-Logstash container which catches the logs from Docker containers (using [logspout](https://github.com/gliderlabs/logspout)) and the local server before shipping them off. Ideally to a central logstash server behind a redis instance (which queues events from remote shippers).
+Logstash container which catches the logs from Docker containers (using [logspout](https://github.com/gliderlabs/logspout)) and the local server before shipping them off. Ideally to a central logstash server behind a redis instance (which queues events from remote shippers before sending them to logstash).
 
 TO DO
 -------------------------
