@@ -1,11 +1,24 @@
+# The logstash instance we'll be shipping the logs to (which then ships
+# them else where)
+logstash:
+  image: ardinor/simplelogstash
+  ports:
+    - "127.0.0.1:5544:5544"
+    # Map port for host itself to use
+    - "127.0.0.1:5545:5545"
+  #environment:
+  #  - REDIS_HOST
+  #  - REDIS_PORT
+  hostname: logstash
+  restart: always
 
 # Apparently logspout needs to either start first or all other
 # containers need to be restarted after it's up for it to get logs
-logs:
+logger:
   image: gliderlabs/logspout:latest
   volumes: /var/run/docker.sock:/tmp/docker.sock
-  ports:
-    - "5687:8000"
+  # Send it to the simplelogstash instance
+  command: syslog://127.0.0.1:5544
   hostname: logspout
   restart: always
 

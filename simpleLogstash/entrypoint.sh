@@ -3,10 +3,10 @@
 if [ ! -f /etc/logstash/conf.d/default.conf ]; then
 
     if [ -z "$REDIS_HOST" -o -z "$REDIS_PORT" ]; then
-        echo >&2 'error: REDIS_HOST and/or REDIS_PORT are not set'
-        echo >&2 '  The Redis host details where the logs will be shipped to need to be added'
-        echo >&2 '  Did you forget to add -e REDIS_HOST=<host> REDIS_PORT=<port>'
-        exit 1
+        echo 'REDIS_HOST and/or REDIS_PORT are not set'
+        echo '  The Redis host details where the logs will be shipped to need to be added'
+        echo '  Did you forget to add -e REDIS_HOST=<host> REDIS_PORT=<port>'
+        echo '  Without these details logs received will just be sent to stdout'
     fi
 
     cat <<EOF >> /etc/logstash/conf.d/default.conf
@@ -54,6 +54,9 @@ filter {
     }
 }
 
+EOF
+    if [ "$REDIS_HOST" ]; then
+        cat <<EOF >> /etc/logstash/conf.d/default.conf
 output {
     stdout { codec => rubydebug }
     redis {
@@ -64,7 +67,18 @@ output {
     }
 }
 EOF
+    else
+        cat <<EOF >> /etc/logstash/conf.d/default.conf
+output {
+    stdout { codec => rubydebug }
+}
+EOF
+    fi
 
 fi
 
+echo "Testing config..."
+/opt/logstash-1.4.2/bin/logstash --config /etc/logstash/conf.d --configtest
+
+echo "Starting..."
 /opt/logstash-1.4.2/bin/logstash --config /etc/logstash/conf.d

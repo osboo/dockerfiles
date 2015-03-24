@@ -12,7 +12,7 @@ RUN mkdir -p /etc/logstash/conf.d
 
 ADD entrypoint.sh /
 
-# Port we'll listen to for syslog messages (from logspout)
+# Port we'll listen on for syslog messages (from logspout)
 EXPOSE 5544
 
 ENTRYPOINT ["/entrypoint.sh"]
