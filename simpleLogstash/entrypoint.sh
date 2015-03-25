@@ -11,38 +11,20 @@ if [ ! -f /etc/logstash/conf.d/default.conf ]; then
 
     cat <<EOF >> /etc/logstash/conf.d/default.conf
 input {
-    tcp {
+    syslog {
         port => "5544"
-        type => "docker"
-    }
-    udp {
-        port => "5544"
-        type => "docker"
-    }
-    tcp {
-        port => "5545"
         type => "syslog"
     }
-    udp {
+    syslog {
         port => "5545"
         type => "syslog"
     }
 }
 
 filter {
-    if [type] == "docker" {
-        grok {
-          match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
-          add_field => [ "received_at", "%{@timestamp}" ]
-          add_field => [ "received_from", "%{host}" ]
-        }
-        syslog_pri { }
-        date {
-          match => [ "time", "ISO8601" ]
-        }
-    }
     if [type] == "syslog" {
         grok {
+          type => "syslog"
           match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
           add_field => [ "received_at", "%{@timestamp}" ]
           add_field => [ "received_from", "%{host}" ]
@@ -58,7 +40,6 @@ EOF
     if [ "$REDIS_HOST" ]; then
         cat <<EOF >> /etc/logstash/conf.d/default.conf
 output {
-    stdout { codec => rubydebug }
     redis {
         host => "$REDIS_HOST"
         port => $REDIS_PORT
@@ -70,7 +51,7 @@ EOF
     else
         cat <<EOF >> /etc/logstash/conf.d/default.conf
 output {
-    stdout { codec => rubydebug }
+    stdout { }
 }
 EOF
     fi
