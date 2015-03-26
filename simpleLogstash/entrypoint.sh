@@ -13,7 +13,7 @@ if [ ! -f /etc/logstash/conf.d/default.conf ]; then
 input {
     syslog {
         port => "5544"
-        type => "syslog"
+        type => "docker"
     }
     syslog {
         port => "5545"
@@ -22,6 +22,15 @@ input {
 }
 
 filter {
+    if [type] == "docker" {
+        grok {
+          match => { "message" => "%{GREEDYDATA:ignore} %{TIMESTAMP_ISO8601:date} %{WORD:container_id} %{WORD:container_name} %{GREEDYDATA:ignore} - \[\] %{GREEDYDATA:log_text}\\n" }
+          add_field => [ "received_at", "%{@timestamp}" ]
+          add_field => [ "received_from", "%{host}" ]
+          remove_field => [ "ignore" ]
+          tag_on_failure => [ ]
+        }
+    }
     if [type] == "syslog" {
         grok {
           type => "syslog"
