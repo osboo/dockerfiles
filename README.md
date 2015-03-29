@@ -14,6 +14,9 @@ Dockerfiles I've made, work in progress at the moment
 
  * Docker file using the latest CentOS to install MariaDB from mariadb.org's yum repo. It follows much of the path as the official [MariaDB repo](https://registry.hub.docker.com/_/mariadb/) except it's on CentOS and it offers support for creating multiple databases on intial creation. For more information, see the [README](https://github.com/ardinor/dockerfiles/tree/master/CentOS-MariaDB)
 
+* ### [simpleLogstash](https://registry.hub.docker.com/u/ardinor/simplelogstash/) ###
+
+ * Docker file for creating a simple instance of logstash with the option of shipping collected logs off to a redis instance, or just outputting them to stdout (fort testing). For more information, see the [README](https://github.com/ardinor/dockerfiles/tree/master/simpleLogstash)
 
 Docker repository is located [here](https://hub.docker.com/u/ardinor/).
 
@@ -22,7 +25,4 @@ Docker repository is located [here](https://hub.docker.com/u/ardinor/).
 
 TO DO
 -------------------------
-- Look at Docker Compose
-- Look at [logspout](https://github.com/gliderlabs/logspout) for logging.
-- Send the logs somewhere, maybe a logstash container and then ship them off?
 - Investigate [Consul](https://www.consul.io/intro/index.html)
