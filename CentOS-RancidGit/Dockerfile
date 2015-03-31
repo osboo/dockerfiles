@@ -3,7 +3,7 @@ MAINTAINER Jordan M <jordan@defestri.org>
 
 RUN yum update -y && yum clean all
 RUN yum group install -y "Development tools"
-RUN yum install -y git cvs expect wget
+RUN yum install -y git cvs expect wget cronie
 
 RUN useradd rancid
 
@@ -15,3 +15,9 @@ RUN cd /tmp &&
     make install
 
 RUN chown -R rancid:rancid /home/rancid
+
+EXPOSE /home/rancid/etc
+
+ADD entrypoint.sh /
+
+ENTRYPOINT ["/entrypoint.sh"]
