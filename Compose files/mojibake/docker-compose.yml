@@ -5,7 +5,6 @@ dbdata:
   # Currently there's no way to make a data only container that does
   # nothing, you need a command or an entrypoint
   command: echo
-  restart: always
 
 mojibakedb:
   image: ardinor/centos-mariadb
@@ -27,7 +26,6 @@ mojibakedata:
   volumes:
     - /var/lib/mojibake
   command: echo
-  restart: always
 
 mojibake:
   image: ardinor/mojibake-python
