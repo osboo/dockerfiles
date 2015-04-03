@@ -23,6 +23,11 @@ RUN cp /usr/share/mysql/my-medium.cnf /etc/my.cnf.d/server.cnf
 # Ensure user is set to run server as mysql user
 RUN sed -i "/\[mysqld\]/a\\user=mysql" /etc/my.cnf.d/server.cnf
 
+# Don't use DNS. When using DNS we get the following errors
+# [Warning] IP address 'xxx.xxx.xxx.xxx' could not be resolved: Name or service not known
+RUN sed -i "/\[mysqld\]/a\\skip-host-cache" /etc/my.cnf.d/server.cnf
+RUN sed -i "/\[mysqld\]/a\\skip-name-resolve" /etc/my.cnf.d/server.cnf
+
 # Seems to default to latin1, make sure it's utf-8
 RUN sed -i "/\[mysqld\]/a\\character-set-server=utf8" /etc/my.cnf.d/server.cnf
 RUN sed -i "/\[client\]/a\\default-character-set=utf8" /etc/my.cnf.d/server.cnf
