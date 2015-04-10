@@ -1,0 +1,21 @@
+config.json
+{
+  "rabbitmq": {
+    "host": "localhost",
+    "vhost": "/",
+    "user": "guest",
+    "password": "guest"
+  },
+  "redis": {
+    "host": "localhost"
+  },
+  "api": {
+    "port": 4567
+  },
+  "handlers": {
+    "default": {
+      "type": "pipe",
+      "command": "cat"
+    }
+  }
+}
