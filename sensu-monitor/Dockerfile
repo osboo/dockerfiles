@@ -18,6 +18,8 @@ RUN yum install -y sensu uchiwa
 RUN mkdir -p /etc/sensu/ssl
 
 COPY supervisord.conf /etc/supervisord.conf
+COPY config.json /etc/sensu/config.json
+COPY uchiwa.json /etc/sensu/uchiwa.json
 
 VOLUME /etc/sensu
 VOLUME /var/log/sensu
