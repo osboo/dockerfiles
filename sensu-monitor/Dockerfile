@@ -23,3 +23,8 @@ COPY uchiwa.json /etc/sensu/uchiwa.json
 
 VOLUME /etc/sensu
 VOLUME /var/log/sensu
+
+EXPOSE 4567
+EXPOSE 3000
+
+CMD /usr/bin/supervisord
