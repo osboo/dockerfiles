@@ -30,7 +30,7 @@ RUN cd /usr/local/bin \
     && ln -s pydoc3.4 pydoc3 \
     && ln -s python3.4 python3 \
     && ln -s pip3.4 pip3 \
-&& ln -s python-config3.4 python-config3
+&& ln -s python3.4m-config python-config3
 
 # Update curl to make it work with git
 RUN yum -y install yum-plugin-ovl && \
